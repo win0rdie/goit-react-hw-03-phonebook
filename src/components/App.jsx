@@ -1,5 +1,4 @@
 import { Component } from 'react';
-// import { Formik } from 'formik';
 import { Container } from './App.styled';
 import ContactForm from './ContactForm';
 import ContactList from './ContactList';
@@ -13,7 +12,22 @@ class App extends Component {
     filter: '',
   };
 
-  // formSubmitHandler = data => console.log(data);
+  componentDidMount() {
+    const contactsLocStor = localStorage.getItem('contacts');
+    const parsedContactsLocStor = JSON.parse(contactsLocStor);
+
+    if (parsedContactsLocStor) {
+      this.setState({ contacts: parsedContactsLocStor });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const contactsNew = this.state.contacts;
+
+    if (contactsNew !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(contactsNew));
+    }
+  }
 
   addContact = ({ name, number }) => {
     const contact = {
